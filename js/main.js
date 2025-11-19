@@ -43,6 +43,7 @@ function init() {
 
     // 📦 CARGAR MODELO FBX
     const loader = new FBXLoader();
+    loader.setResourcePath('./models/fbx/');
     loader.load("./models/fbx/exa.fbx", (group) => {
 
         // ORIENTACIÓN (ajústala si tu salón sale girado)
