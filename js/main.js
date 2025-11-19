@@ -40,15 +40,14 @@ function init() {
     dirLight.castShadow = true;
     scene.add(dirLight);
 
-    // 🔥 FIX DEFINITIVO PARA LAS TEXTURAS:
-    // Ignora las rutas internas dañadas dentro del FBX
+    // 🔥 FIX DEFINITIVO PARA TEXTURAS
     const manager = new THREE.LoadingManager();
     manager.setURLModifier((url) => {
-        const filename = url.split('/').pop();     // Tomar solo el nombre
-        return 'models/fbx/' + filename;           // Reemplazar por ruta correcta
+        const filename = url.split('/').pop();  
+        return 'models/fbx/' + filename;        
     });
 
-    // FBX LOADER usando el manager reparador
+    // FBX LOADER con manager reparador
     const loader = new FBXLoader(manager);
 
     loader.load("models/fbx/exa.fbx", (group) => {
@@ -58,7 +57,7 @@ function init() {
         group.rotation.y = Math.PI;
         group.rotation.z = 0;
 
-        // ESCALADO AUTOMÁTICO
+        // ESCALA AUTOMÁTICA
         let box = new THREE.Box3().setFromObject(group);
         const size = new THREE.Vector3();
         box.getSize(size);
@@ -70,12 +69,12 @@ function init() {
         // RECALCULAR
         box.setFromObject(group);
 
-        // CENTRAR EN X,Z
+        // CENTRAR X & Z
         const center = box.getCenter(new THREE.Vector3());
         group.position.x -= center.x;
         group.position.z -= center.z;
 
-        // AJUSTAR EN Y (piso a 0)
+        // AJUSTAR A PISO (Y = 0)
         box.setFromObject(group);
         const minY = box.min.y;
         group.position.y -= minY;
