@@ -41,10 +41,17 @@ function init() {
     scene.add(dirLight);
 
     // FBX LOADER
-   const loader = new FBXLoader();
-loader.setResourcePath('models/fbx/');
+    const manager = new THREE.LoadingManager();
+manager.setURLModifier((url) => {
+    const filename = url.split('/').pop();
+    return 'models/fbx/' + filename;
+});
 
-loader.load("models/fbx/exa.fbx", (group) => {
+const loader = new FBXLoader(manager);
+loader.load('models/fbx/exa.fbx', (group) => {
+
+   const loader = new FBXLoader();
+   loader.load("models/fbx/exa.fbx", (group) => {
 
 
         // ORIENTACIÓN DEL MODELO
