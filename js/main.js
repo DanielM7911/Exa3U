@@ -43,7 +43,7 @@ function init() {
 
     // 📦 CARGAR MODELO FBX
     const loader = new FBXLoader();
-    loader.load("models/fbx/exa.fbx", (group) => {
+    loader.load("./models/fbx/exa.fbx", (group) => {
 
         // ORIENTACIÓN (ajústala si tu salón sale girado)
         group.rotation.x = Math.PI / 2;
