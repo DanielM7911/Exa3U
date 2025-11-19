@@ -41,12 +41,11 @@ function init() {
     scene.add(dirLight);
 
     // FBX LOADER
-    const loader = new FBXLoader();
+   const loader = new FBXLoader();
+loader.setResourcePath('models/fbx/');
 
-    // 🔥 MUY IMPORTANTE: Ruta donde están TODAS las texturas
-    loader.setResourcePath('./models/fbx/');
+loader.load("models/fbx/exa.fbx", (group) => {
 
-    loader.load("./models/fbx/exa.fbx", (group) => {
 
         // ORIENTACIÓN DEL MODELO
         group.rotation.x = Math.PI / 2;
