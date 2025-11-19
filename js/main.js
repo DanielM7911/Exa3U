@@ -40,21 +40,20 @@ function init() {
     dirLight.castShadow = true;
     scene.add(dirLight);
 
-    // FBX LOADER
+    // 🔥 FIX DEFINITIVO PARA LAS TEXTURAS:
+    // Ignora las rutas internas dañadas dentro del FBX
     const manager = new THREE.LoadingManager();
-manager.setURLModifier((url) => {
-    const filename = url.split('/').pop();
-    return 'models/fbx/' + filename;
-});
+    manager.setURLModifier((url) => {
+        const filename = url.split('/').pop();     // Tomar solo el nombre
+        return 'models/fbx/' + filename;           // Reemplazar por ruta correcta
+    });
 
-const loader = new FBXLoader(manager);
-loader.load('models/fbx/exa.fbx', (group) => {
+    // FBX LOADER usando el manager reparador
+    const loader = new FBXLoader(manager);
 
-   const loader = new FBXLoader();
-   loader.load("models/fbx/exa.fbx", (group) => {
+    loader.load("models/fbx/exa.fbx", (group) => {
 
-
-        // ORIENTACIÓN DEL MODELO
+        // ORIENTACIÓN
         group.rotation.x = Math.PI / 2;
         group.rotation.y = Math.PI;
         group.rotation.z = 0;
@@ -68,20 +67,20 @@ loader.load('models/fbx/exa.fbx', (group) => {
         const factorEscala = alturaDeseada / size.y;
         group.scale.setScalar(factorEscala);
 
-        // RE-CALCULAR CAJA
+        // RECALCULAR
         box.setFromObject(group);
 
-        // CENTRAR MODELO (X, Z)
+        // CENTRAR EN X,Z
         const center = box.getCenter(new THREE.Vector3());
         group.position.x -= center.x;
         group.position.z -= center.z;
 
-        // BAJAR A PISO (Y = 0)
+        // AJUSTAR EN Y (piso a 0)
         box.setFromObject(group);
         const minY = box.min.y;
         group.position.y -= minY;
 
-        // DOBLE CARA Y SOMBRAS
+        // DOBLE CARA + SOMBRAS
         group.traverse((child) => {
             if (child.isMesh && child.material) {
                 child.material.side = THREE.DoubleSide;
@@ -90,11 +89,10 @@ loader.load('models/fbx/exa.fbx', (group) => {
             }
         });
 
-        // AÑADIR MODELO A LA ESCENA
         scene.add(group);
         object = group;
 
-        // POSICIÓN DEL USUARIO EN VR
+        // POSICIÓN VR
         camera.position.set(0, 1.6, 0.5);
         controls.target.set(0, 1.6, -2);
         controls.update();
